@@ -1,0 +1,126 @@
+# -------------------------
+
+# Python
+
+# -------------------------
+
+**pycache**/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# -------------------------
+
+# Virtual Environment
+
+# -------------------------
+
+venv/
+.env/
+.venv/
+
+# -------------------------
+
+# Environment Variables
+
+# -------------------------
+
+.env
+
+# -------------------------
+
+# Logs
+
+# -------------------------
+
+*.log
+
+# -------------------------
+
+# OS Files
+
+# -------------------------
+
+.DS_Store
+Thumbs.db
+
+# -------------------------
+
+# IDE / Editor
+
+# -------------------------
+
+.vscode/
+.idea/
+
+# -------------------------
+
+# Jupyter / ML
+
+# -------------------------
+
+.ipynb_checkpoints/
+*.ipynb
+
+# -------------------------
+
+# ML Models & Data
+
+# -------------------------
+
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.onnx
+data/
+datasets/
+
+# -------------------------
+
+# Build / Distribution
+
+# -------------------------
+
+build/
+dist/
+*.egg-info/
+
+# -------------------------
+
+# Docker (optional later)
+
+# -------------------------
+
+*.env.docker
+
+# -------------------------
+
+# Streamlit
+
+# -------------------------
+
+.streamlit/
+
+# -------------------------
+
+# Test / Coverage
+
+# -------------------------
+
+.coverage
+htmlcov/
+.pytest_cache/
+
+# -------------------------
+
+# Misc
+
+# -------------------------
+
+*.sqlite3
+.sixth/
+.sixth
+venv\Lib\site-packages\cryptography-46.0.7.dist-info\WHEEL
+backend/create_first_admin.py
