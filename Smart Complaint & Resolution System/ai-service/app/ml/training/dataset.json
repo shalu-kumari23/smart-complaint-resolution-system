@@ -1,0 +1,164 @@
+[
+  {
+    "text": "Potholes on the main road are causing severe traffic congestion and damage to cars. Please repair the road.",
+    "category": "Roads",
+    "priority": "medium",
+    "sentiment": "negative"
+  },
+  {
+    "text": "The main avenue has a massive sinkhole that could cause a major accident. It is extremely dangerous.",
+    "category": "Roads",
+    "priority": "high",
+    "sentiment": "negative"
+  },
+  {
+    "text": "The pavement on 5th street has cracked completely and elderly people are tripping. Needs urgent repair.",
+    "category": "Roads",
+    "priority": "medium",
+    "sentiment": "negative"
+  },
+  {
+    "text": "Road construction has been abandoned halfway, blocking the entrance to our residential complex.",
+    "category": "Roads",
+    "priority": "medium",
+    "sentiment": "negative"
+  },
+  {
+    "text": "Frequent power outages in our locality. The electricity goes off every 2 hours without any warning.",
+    "category": "Electricity",
+    "priority": "medium",
+    "sentiment": "negative"
+  },
+  {
+    "text": "Live high-voltage wire is dangling from the electric pole on the main street. This is a life hazard!",
+    "category": "Electricity",
+    "priority": "high",
+    "sentiment": "negative"
+  },
+  {
+    "text": "The transformer in our area is sparking continuously and making loud noises. We fear it might explode.",
+    "category": "Electricity",
+    "priority": "high",
+    "sentiment": "negative"
+  },
+  {
+    "text": "Electricity bill is incorrectly calculated. It is showing a massive amount that does not match my meter readings.",
+    "category": "Electricity",
+    "priority": "low",
+    "sentiment": "negative"
+  },
+  {
+    "text": "Streetlights are not working in our lane. It is pitch dark at night, making it unsafe for women and children.",
+    "category": "Street Light",
+    "priority": "medium",
+    "sentiment": "negative"
+  },
+  {
+    "text": "All the street lights on the highway patch near exit 4 are broken. Driving at night is very risky.",
+    "category": "Street Light",
+    "priority": "high",
+    "sentiment": "negative"
+  },
+  {
+    "text": "The street light in front of house 42B is blinking constantly, causing irritation to residents.",
+    "category": "Street Light",
+    "priority": "low",
+    "sentiment": "neutral"
+  },
+  {
+    "text": "There is no drinking water supply in our apartment complex for the past 3 days. We have to buy private tankers.",
+    "category": "Water Supply",
+    "priority": "high",
+    "sentiment": "negative"
+  },
+  {
+    "text": "A major water pipe leak has occurred on the main road, wasting thousands of liters of clean water.",
+    "category": "Water Supply",
+    "priority": "medium",
+    "sentiment": "negative"
+  },
+  {
+    "text": "The municipal water supplied to our house is muddy and has a strong chemical smell. It is contaminated.",
+    "category": "Water Supply",
+    "priority": "high",
+    "sentiment": "negative"
+  },
+  {
+    "text": "Garbage has not been collected from our bins for over a week. The pile is rotting and attracting flies.",
+    "category": "Sanitation",
+    "priority": "medium",
+    "sentiment": "negative"
+  },
+  {
+    "text": "People are dumping plastic waste and construction debris in the local park, turning it into a dump yard.",
+    "category": "Sanitation",
+    "priority": "medium",
+    "sentiment": "negative"
+  },
+  {
+    "text": "The garbage collection truck did not come today. I am happy with the usual service but today was missed.",
+    "category": "Sanitation",
+    "priority": "low",
+    "sentiment": "neutral"
+  },
+  {
+    "text": "Public toilets near the market are extremely dirty, unhygienic, and emit a terrible foul smell.",
+    "category": "Sanitation",
+    "priority": "medium",
+    "sentiment": "negative"
+  },
+  {
+    "text": "The open drainage pipe is blocked and dirty black sewage water is overflowing onto the walking path.",
+    "category": "Drainage",
+    "priority": "high",
+    "sentiment": "negative"
+  },
+  {
+    "text": "Rainwater is flooding the entire road because the storm water drains are clogged with plastic bags and dirt.",
+    "category": "Drainage",
+    "priority": "high",
+    "sentiment": "negative"
+  },
+  {
+    "text": "The gutter cover in front of the grocery shop is broken, leaving a deep open hole on the busy footpath.",
+    "category": "Drainage",
+    "priority": "high",
+    "sentiment": "negative"
+  },
+  {
+    "text": "Road quality is excellent after the recent tarring. Thanks to the municipal corporation for the swift work.",
+    "category": "Roads",
+    "priority": "low",
+    "sentiment": "positive"
+  },
+  {
+    "text": "Very satisfied with the quick restoration of power after the storm. The line workers did a great job.",
+    "category": "Electricity",
+    "priority": "low",
+    "sentiment": "positive"
+  },
+  {
+    "text": "Water leakage in the pipeline was fixed quickly. Good service by the plumbing department.",
+    "category": "Water Supply",
+    "priority": "low",
+    "sentiment": "positive"
+  },
+  {
+    "text": "The school building has cracked walls that pose a risk to students. Please inspect it.",
+    "category": "Other",
+    "priority": "medium",
+    "sentiment": "negative"
+  },
+  {
+    "text": "Stray dog menace is increasing in our sector. They are chasing children playing in the evenings.",
+    "category": "Other",
+    "priority": "medium",
+    "sentiment": "negative"
+  },
+  {
+    "text": "Illegal parking in the residential zone is causing daily arguments and blocking paths.",
+    "category": "Other",
+    "priority": "low",
+    "sentiment": "negative"
+  }
+]

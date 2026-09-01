@@ -1,151 +1,164 @@
-<div align="center">
+# AI-Powered Smart Complaint & Resolution System
 
-<img src="https://img.shields.io/badge/ResolveAI-Complaints%20to%20Resolution-6366f1?style=for-the-badge&logo=sparkles&logoColor=white" alt="ResolveAI Banner" />
-
-# 🛡️ ResolveAI
-### *From Complaints to Resolution — Powered by AI*
-
-> An intelligent grievance management platform that transforms how organizations handle complaints — from intelligent intake to automated routing and AI-assisted resolution.
-
-<br/>
-
-[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
-[![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white)](https://streamlit.io/)
-[![JWT](https://img.shields.io/badge/JWT-000000?style=flat-square&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
-
-<br/>
-
-[Features](#-features) • [Architecture](#-architecture) • [Modules](#-modules) • [Quick Start](#-quick-start) • [API Reference](#-api-reference)
-
-</div>
+An intelligent municipal/corporate grievance management platform. Citizens file complaints, and an AI service automatically runs natural language categorization, priority scaling, sentiment analysis, resolution ETA predictions, duplicate checks (via scikit-learn cosine text embeddings), and drafts response emails. Officials resolve issues, and administrators oversee metrics, map overlays, audit logs, and routing overrides.
 
 ---
 
-## 📌 Overview
+## 👥 User Roles & Portals
 
-**ResolveAI** is a production-grade, AI-powered grievance management system built to streamline the full lifecycle of complaint handling. It replaces manual, error-prone processes with intelligent automation.
+1. **Citizen User**:
+   - Register, login, and profile tracking.
+   - Submit complaints with automated location-based mapping.
+   - View complaint lifecycle timelines.
+   - Read automated AI analysis (urgency scores, resolution dates, recommended drafts).
+   - View notification alerts and submit 1-5 star reviews with comments after resolution.
 
-### 👥 User Roles & Dashboards
-The system features a **unified Streamlit application** with high-contrast, professional UI components and role-based access:
+2. **Department Officer**:
+   - Queue tracking for tickets matching their specific department (Roads, Electricity, Water, Sanitation, Drainage).
+   - In-place filters for statuses (Assigned, In Progress, Resolved).
+   - Details view to log progress notes and attach completion assets.
+   - Update statuses to transition tickets to `IN_PROGRESS` or `RESOLVED`.
 
-- 👤 **Citizen Dashboard**: Submit complaints with AI-driven priority assessment, track status in real-time, and receive resolution notifications.
-- 🏢 **Department Dashboard**: Manage assigned queues, update resolution notes, and track performance metrics.
-- 🛡️ **Admin Dashboard**: Full system oversight, department management, user auditing, and advanced analytics.
-
----
-
-## ✨ Latest Updates (v1.1)
-
-### 🎈 Streamlit Enhancements
-- **Enhanced UI/UX**: Custom CSS injection for high-contrast "Dark Mode" metric cards and professional sidebar navigation.
-- **Robust Registration**: Implemented `st.form` for atomic user registration with client-side validation (regex for emails, space-checks for usernames).
-- **Live Status Updates**: Real-time status badges (Open, In Progress, Resolved) with immediate UI feedback.
-- **Improved Connection Handling**: Global API helper with automated error reporting for backend connectivity.
-
-### ⚡ Backend Improvements
-- **Expanded API Ecosystem**: Added public `/departments` listing, dedicated `/admin/analytics` endpoints, and robust `/complaints/{id}/track` history.
-- **Surgical Updates**: Department officers can now provide resolution notes via atomic `PUT /department/update/{id}` calls.
-- **Admin Controls**: New capabilities for complaint reassignment and administrative deletion.
-- **Schema Hardening**: Broadened status validation and improved Pydantic models for cross-layer data consistency.
+3. **Super Administrator**:
+   - Global metrics dashboard (Open vs. Resolved ticket numbers, Average SLA times).
+   - Recharts visual logs (monthly trends, priority distributions, category splits).
+   - React Leaflet dynamic map overlays with color-coded complaint category markers.
+   - Trigger manual department overrides, select officers, and retry failed AI evaluations.
+   - Register new municipal departments and view the system-wide Audit activity trail.
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Monorepo Architecture
 
 ```
-ResolveAI/
-├── backend/               # FastAPI application
+smart-complaint-resolution/
+│
+├── frontend/                 # React.js + Vite Web Application
+│   ├── src/
+│   │   ├── components/       # Shared layout components
+│   │   ├── context/          # Auth context state and localStorage sync
+│   │   ├── pages/            # Landing, Login, User/Officer/Admin Portals
+│   │   ├── services/         # Axios backend api client
+│   │   ├── App.jsx           # Protected routes and navigation tree
+│   │   ├── index.css         # Styling, custom colors and glassmorphism classes
+│   │   └── main.jsx          # DOM rendering entrypoint
+│   ├── package.json
+│   └── .env.example
+│
+├── backend/                  # Node.js + Express.js Main API Server
+│   ├── config/               # Mongoose DB connections helper
+│   ├── middleware/           # Role-based JWT verification layers
+│   ├── models/               # MongoDB models (User, Complaint, AuditLog, etc.)
+│   ├── routes/               # API endpoints (auth, complaints, departments, admin)
+│   ├── services/             # Axios connector client to Python AI FastAPI
+│   ├── utils/                # Seeding scripts for realistic data setups
+│   ├── tests/                # Jest + Supertest backend integration tests
+│   ├── server.js             # Express bootstrapping
+│   ├── package.json
+│   └── .env.example
+│
+├── ai-service/               # Python FastAPI AI Analytics Service
 │   ├── app/
-│   │   ├── routers/       # API endpoints (auth, complaints, admin, dept, public)
-│   │   ├── services/      # Core business logic & database interactions
-│   │   ├── schemas/       # Pydantic validation models
-│   │   ├── models/        # Database document structures
-│   │   └── main.py        # Entry point & router registration
+│   │   ├── ml/               # Text parsing & TF-IDF Cosine duplicate detectors
+│   │   ├── llm/              # Gemini summarizer & local rule summaries
+│   │   ├── main.py           # FastAPI routes (/health, /analyze, /classify, etc.)
+│   │   ├── config.py         # Settings verification
+│   │   └── database.py       # Safe MongoDB connection index builders
+│   ├── requirements.txt
+│   └── .env.example
 │
-├── frontend/              # Unified Streamlit application
-│   └── streamlit_app.py   # High-performance UI with role-based routing
-│
-├── ml/                    # Machine Learning module
-│   ├── training/          # Model training scripts (urgency, duplicate, routing)
-│   ├── inference/         # Prediction logic for live complaints
-│   └── evaluation/        # Metrics & performance tracking
-│
-├── llm/                   # LLM integration module
-│   ├── prompts/           # Specialized templates for resolution & summarization
-│   └── email_generator.py # Automated notification logic
-│
-├── infra/                 # Infrastructure & DevOps
-│   └── docker-compose.yml # Full-stack orchestration (API + DB + UI)
 └── README.md
 ```
 
 ---
 
-## ⚡ Quick Start
+## ⚡ Tech Stack
 
-### 1. Run with Docker (Recommended)
-```bash
-cd infra
-docker-compose up --build
-```
-- **Frontend UI**: `http://localhost:8501`
-- **FastAPI Docs**: `http://localhost:8000/docs`
+- **Frontend**: React (v18), Vite, React Router DOM, Axios, Bootstrap 5, Recharts, React Leaflet, Lucide icons.
+- **Backend**: Node.js, Express, MongoDB (Mongoose), JWT, BcryptJS, CORS, Helmet, Express Rate Limit.
+- **AI Service**: Python 3.10+, FastAPI, Pydantic, Scikit-Learn, Pymongo, Gemini API.
 
-### 2. Local Manual Setup
+---
+
+## 🚀 Installation & Running the System
+
+You will need **three terminals** to run the services concurrently. Make sure MongoDB is running locally at `mongodb://localhost:27017`.
+
+### Terminal 1: Backend Server (Node.js)
 ```bash
-# Backend
 cd backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload
+npm install
+# Seed the database first with Admin, Officers, and 30+ complaints
+node utils/seed.js
+# Start development server on Port 5000
+npm run dev
+```
 
-# Frontend
-cd frontend
+### Terminal 2: AI Service (Python FastAPI)
+```bash
+cd ai-service
+# Create virtual environment
+python -m venv venv
+# Activate virtual environment (Windows)
+.\venv\Scripts\activate
+# Install requirements
 pip install -r requirements.txt
-streamlit run streamlit_app.py
+# Start FastAPI server on Port 8000
+uvicorn app.main:app --reload --port 8000
+```
+
+### Terminal 3: Frontend Web App (React)
+```bash
+cd frontend
+npm install
+# Start Vite development server on Port 5173
+npm run dev
 ```
 
 ---
 
-## 📖 API Reference (Key Endpoints)
+## 🛡️ Test Credentials
 
-### 🏠 Public
-- `GET /departments` — List available departments for registration/submission.
+Login using the following predefined accounts on the `/login` route:
 
-### 🔑 Authentication
-- `POST /users/login` — Citizen login.
-- `POST /department/login` — Officer login.
-- `POST /admin/login` — Administrative login.
-- `POST /users/create` — New citizen registration.
-
-### 📋 Complaints
-- `POST /complaints/create` — Submit new grievance (Triggers AI analysis).
-- `GET /complaints/list` — Personal complaint history.
-- `GET /complaints/{id}/track` — Detailed status and history.
-- `PUT /department/update/{id}` — Department-level status & resolution update.
-
-### 🛡️ Admin
-- `GET /admin/analytics` — Global metrics (Status distribution, resolution times).
-- `PUT /admin/complaints/{id}/assign` — Reassign complaint to another department.
-- `DELETE /admin/complaints/{id}` — Administrative removal of records.
+- **Super Admin**:
+  - Email: `admin@civic.gov`
+  - Password: `admin123`
+- **Department Officers**:
+  - Roads Officer: `roads_officer@civic.gov` (Password: `officer123`)
+  - Electricity Officer: `elec_officer@civic.gov` (Password: `officer123`)
+  - Water Officer: `water_officer@civic.gov` (Password: `officer123`)
+  - Sanitation Officer: `san_officer@civic.gov` (Password: `officer123`)
+  - Drainage Officer: `drain_officer@civic.gov` (Password: `officer123`)
+- **Citizen Users**:
+  - User 1: `user1@gmail.com` (Password: `user123`)
+  - User 2: `user2@gmail.com` (Password: `user123`)
 
 ---
 
-## 🛠️ Tech Stack
+## 📖 API Endpoints
 
-- **Frontend**: Streamlit (Custom CSS, Pandas for charts)
-- **Backend**: FastAPI (Python 3.10+)
-- **Database**: MongoDB (NoSQL)
-- **Security**: JWT (OAuth2 Password Bearer)
-- **ML/NLP**: Scikit-Learn, MLflow
-- **Containerization**: Docker & Docker Compose
+### Node.js Backend API (Port 5000)
+- `POST /api/auth/register` - Create citizen/officer accounts.
+- `POST /api/auth/login` - Authenticate accounts and obtain JWT.
+- `GET /api/auth/me` - Profile context verification.
+- `POST /api/complaints` - File complaint (routes text through FastAPI AI).
+- `GET /api/complaints/my` - Citizen's complaint dashboard list.
+- `GET /api/complaints/officer` - Officer's department queue list.
+- `GET /api/complaints/:id` - Detailed ticket tracking.
+- `PUT /api/complaints/:id/status` - Officer progress & resolution logs.
+- `PUT /api/complaints/:id/assign` - Admin department manual override routing.
+- `PUT /api/complaints/:id/retry-ai` - Re-evaluate complaint using AI.
+- `POST /api/complaints/:id/feedback` - User rating reviews.
+- `DELETE /api/complaints/:id` - Inappropriate content moderation.
+- `GET /api/admin/dashboard` - Recharts aggregates & KPI cards.
+- `GET /api/admin/audit-logs` - System-wide audit trails.
 
----
-
-## 👨‍💻 Author
-**Aryan Rahate**
-[![GitHub](https://img.shields.io/badge/GitHub-rnrahate-181717?style=flat-square&logo=github)](https://github.com/rnrahate)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-aryan--rahate-0077B5?style=flat-square&logo=linkedin)](https://linkedin.com/in/aryan-rahate)
+### FastAPI AI Service API (Port 8000)
+- `GET /health` - API connectivity check.
+- `POST /classify` - Auto-department categorizations.
+- `POST /priority` - Priority mappings and scores.
+- `POST /sentiment` - Sentiment values and urgency grades.
+- `POST /duplicate-check` - TF-IDF cosine matching check.
+- `POST /resolution-prediction` - Hours to complete estimation.
+- `POST /analyze` - Consolidates all AI steps into one payload.
