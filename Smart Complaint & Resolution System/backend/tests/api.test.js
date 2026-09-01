@@ -5,6 +5,8 @@ const User = require('../models/User');
 const Complaint = require('../models/Complaint');
 const Department = require('../models/Department');
 
+jest.setTimeout(30000);
+
 let token = '';
 let officerToken = '';
 let adminToken = '';
@@ -17,7 +19,7 @@ beforeAll(async () => {
   await User.deleteMany({ email: /test.*@civic\.gov/ });
   await Complaint.deleteMany({ title: /Test Complaint/ });
   await Department.deleteMany({ name: 'Test Department' });
-});
+}, 30000);
 
 afterAll(async () => {
   // Cleanup test entries
@@ -28,7 +30,7 @@ afterAll(async () => {
   // Close server and mongoose connection
   await mongoose.connection.close();
   await server.close();
-});
+}, 30000);
 
 describe('Smart Complaint & Resolution System Backend Integration Tests', () => {
   

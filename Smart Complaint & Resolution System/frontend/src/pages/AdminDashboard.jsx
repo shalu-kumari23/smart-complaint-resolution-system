@@ -853,4 +853,24 @@ const AdminDashboard = () => {
               </thead>
               <tbody>
                 {auditLogs.map(log => (
-                  <
+                  <tr key={log._id}>
+                    <td className="small text-muted font-monospace">{new Date(log.createdAt).toLocaleString()}</td>
+                    <td>
+                      <span className="fw-bold text-white-50 small d-block">{log.userName}</span>
+                      <span className="text-muted small" style={{ fontSize: '0.65rem' }}>ID: {log.userId}</span>
+                    </td>
+                    <td><strong className="text-white small">{log.action}</strong></td>
+                    <td className="font-monospace text-info small">{log.complaintId || 'N/A'}</td>
+                    <td className="small text-muted">{log.details}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AdminDashboard;

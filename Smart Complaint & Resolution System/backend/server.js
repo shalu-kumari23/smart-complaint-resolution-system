@@ -18,9 +18,22 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 
+// Normalize Content-Type header before body parser to prevent 'unsupported charset' errors
+app.use((req, res, next) => {
+  const ct = req.headers['content-type'];
+  if (ct) {
+    if (ct.toLowerCase().startsWith('application/json')) {
+      req.headers['content-type'] = 'application/json';
+    } else if (ct.toLowerCase().startsWith('application/x-www-form-urlencoded')) {
+      req.headers['content-type'] = 'application/x-www-form-urlencoded';
+    }
+  }
+  next();
+});
+
 // Express JSON Parsing (Body Parser)
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Serve Uploads statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -28,7 +41,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Rate Limiting (Prevent API abuse)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 200, // Limit each IP to 200 requests per windowMs
+  max: 300, // Limit each IP to 300 requests per windowMs
   message: { message: 'Too many requests from this IP, please try again after 15 minutes' },
   standardHeaders: true,
   legacyHeaders: false,
@@ -49,8 +62,9 @@ app.get('/', (req, res) => {
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
+  console.error('Server Error:', err.message);
+  const statusCode = err.status || err.statusCode || 500;
+  res.status(statusCode).json({
     message: err.message || 'Internal Server Error',
     stack: process.env.NODE_ENV === 'production' ? null : err.stack
   });

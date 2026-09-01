@@ -5,6 +5,13 @@ const AuthContext = createContext();
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
+const authAxios = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token') || null);
@@ -13,8 +20,10 @@ export const AuthProvider = ({ children }) => {
   // Set auth header helper
   const setAuthHeader = (authToken) => {
     if (authToken) {
+      authAxios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
       axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
     } else {
+      delete authAxios.defaults.headers.common['Authorization'];
       delete axios.defaults.headers.common['Authorization'];
     }
   };
@@ -24,7 +33,7 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         setAuthHeader(token);
         try {
-          const res = await axios.get(`${API_URL}/auth/me`);
+          const res = await authAxios.get('/auth/me');
           setUser(res.data);
         } catch (err) {
           console.error('Failed to load user', err);
@@ -40,7 +49,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const res = await axios.post(`${API_URL}/auth/login`, { email, password });
+      const res = await authAxios.post('/auth/login', { email, password });
       const { token: userToken, ...userData } = res.data;
       
       localStorage.setItem('token', userToken);
@@ -50,10 +59,10 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true, user: userData };
     } catch (err) {
-      console.error(err);
+      console.error('Login error:', err);
       return {
         success: false,
-        message: err.response?.data?.message || 'Login failed'
+        message: err.response?.data?.message || 'Login failed. Please check your credentials.'
       };
     } finally {
       setLoading(false);
@@ -64,7 +73,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, email, password, role, departmentName) => {
     setLoading(true);
     try {
-      const res = await axios.post(`${API_URL}/auth/register`, {
+      const res = await authAxios.post('/auth/register', {
         name,
         email,
         password,
@@ -80,7 +89,7 @@ export const AuthProvider = ({ children }) => {
 
       return { success: true, user: userData };
     } catch (err) {
-      console.error(err);
+      console.error('Registration error:', err);
       return {
         success: false,
         message: err.response?.data?.message || 'Registration failed'
@@ -116,3 +125,4 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+

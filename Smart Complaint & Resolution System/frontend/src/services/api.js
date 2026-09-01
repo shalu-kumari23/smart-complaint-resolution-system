@@ -87,4 +87,43 @@ const api = {
     const res = await apiClient.get('/departments');
     return res.data;
   },
-  createDepa
+  createDepartment: async (deptData) => {
+    const res = await apiClient.post('/departments', deptData);
+    return res.data;
+  },
+  getOfficers: async () => {
+    const res = await apiClient.get('/departments/officers');
+    return res.data;
+  },
+
+  // Notifications API
+  getNotifications: async () => {
+    const res = await apiClient.get('/notifications');
+    return res.data;
+  },
+  markNotificationRead: async (id) => {
+    const res = await apiClient.put(`/notifications/${id}/read`);
+    return res.data;
+  },
+
+  // Admin API
+  getAdminDashboard: async () => {
+    const res = await apiClient.get('/admin/dashboard');
+    return res.data;
+  },
+  getAdminComplaints: async (filters = {}) => {
+    const res = await apiClient.get('/admin/complaints', { params: filters });
+    return res.data;
+  },
+  getAdminUsers: async () => {
+    const res = await apiClient.get('/admin/users');
+    return res.data;
+  },
+  getAdminAuditLogs: async () => {
+    const res = await apiClient.get('/admin/audit-logs');
+    return res.data;
+  }
+};
+
+export default api;
+
