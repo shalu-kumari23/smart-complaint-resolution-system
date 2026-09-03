@@ -1,0 +1,14 @@
+{
+  "name": "smart-complaint-resolution-system-root",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Root workspace runner for Smart Complaint & Resolution System",
+  "scripts": {
+    "dev": "npm --prefix \"Smart Complaint & Resolution System/frontend\" run dev",
+    "frontend": "npm --prefix \"Smart Complaint & Resolution System/frontend\" run dev",
+    "backend": "npm --prefix \"Smart Complaint & Resolution System/backend\" run dev",
+    "server": "node \"Smart Complaint & Resolution System/backend/server.js\"",
+    "start": "node \"Smart Complaint & Resolution System/backend/server.js\"",
+    "seed": "node \"Smart Complaint & Resolution System/backend/utils/seed.js\""
+  }
+}
