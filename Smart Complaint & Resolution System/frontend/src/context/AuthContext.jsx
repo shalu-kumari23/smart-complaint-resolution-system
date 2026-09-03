@@ -60,9 +60,17 @@ export const AuthProvider = ({ children }) => {
       return { success: true, user: userData };
     } catch (err) {
       console.error('Login error:', err);
+      let errorMsg = 'Login failed. Please try again.';
+      if (err.response?.data?.message) {
+        errorMsg = err.response.data.message;
+      } else if (err.code === 'ERR_NETWORK' || !err.response) {
+        errorMsg = 'Cannot connect to backend server. Please make sure the server is running at http://localhost:5000.';
+      } else if (err.response?.status === 500) {
+        errorMsg = 'Internal Server Error. Please verify MongoDB is running.';
+      }
       return {
         success: false,
-        message: err.response?.data?.message || 'Login failed. Please check your credentials.'
+        message: errorMsg
       };
     } finally {
       setLoading(false);
@@ -90,9 +98,17 @@ export const AuthProvider = ({ children }) => {
       return { success: true, user: userData };
     } catch (err) {
       console.error('Registration error:', err);
+      let errorMsg = 'Registration failed. Please try again.';
+      if (err.response?.data?.message) {
+        errorMsg = err.response.data.message;
+      } else if (err.code === 'ERR_NETWORK' || !err.response) {
+        errorMsg = 'Cannot connect to backend server. Please make sure the server is running at http://localhost:5000.';
+      } else if (err.response?.status === 500) {
+        errorMsg = 'Internal Server Error during registration. Please verify MongoDB is running.';
+      }
       return {
         success: false,
-        message: err.response?.data?.message || 'Registration failed'
+        message: errorMsg
       };
     } finally {
       setLoading(false);

@@ -55,7 +55,18 @@ app.use('/api/departments', require('./routes/departments'));
 app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/admin', require('./routes/admin'));
 
-// Root Endpoint
+// Health Check & Root Endpoints
+app.get('/api/health', (req, res) => {
+  const mongoose = require('mongoose');
+  const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+  res.json({
+    status: 'ok',
+    server: 'running',
+    database: dbStatus,
+    timestamp: new Date().toISOString()
+  });
+});
+
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the Smart Complaint & Resolution API 🚀' });
 });

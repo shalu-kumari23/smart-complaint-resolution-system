@@ -369,11 +369,13 @@ const getGeocode = (locationStr) => {
   return [baseCoords[0] + jitterLat, baseCoords[1] + jitterLng];
 };
 
-const seed = async () => {
+const seed = async (keepOpen = false) => {
   try {
-    const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/smart_complaint_resolution';
-    await mongoose.connect(mongoUri);
-    console.log('MongoDB connected for seeding...');
+    if (mongoose.connection.readyState !== 1) {
+      const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/smart_complaint_resolution';
+      await mongoose.connect(mongoUri);
+      console.log('MongoDB connected for seeding...');
+    }
 
     // Clear existing data
     await User.deleteMany({});
@@ -604,13 +606,26 @@ const seed = async () => {
     }
 
     console.log(`Seeded ${count} complaints successfully.`);
-    mongoose.connection.close();
-    process.exit(0);
-
+    if (!keepOpen) {
+      await mongoose.connection.close();
+      process.exit(0);
+    }
   } catch (err) {
     console.error('Seeding error:', err);
-    process.exit(1);
+    if (!keepOpen) {
+      process.exit(1);
+    }
+    throw err;
   }
 };
 
-seed();
+if (require.main === module) {
+  const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/smart_complaint_resolution';
+  mongoose.connect(mongoUri).then(() => seed(false)).catch(err => {
+    console.error('Seeding connection error:', err);
+    process.exit(1);
+  });
+}
+
+module.exports = { seedData: seed };
+
