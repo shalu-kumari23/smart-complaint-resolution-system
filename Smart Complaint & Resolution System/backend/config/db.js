@@ -3,16 +3,36 @@ const { seedData } = require('../utils/seed');
 
 let mongodInstance = null;
 
+// Helper to mask credentials in connection logs
+const sanitizeUri = (uri) => {
+  if (!uri) return 'undefined';
+  return uri.replace(/\/\/(.*?):(.*?)@/, '//$1:****@');
+};
+
 const connectDB = async () => {
   const customUri = process.env.MONGO_URI;
   const isProduction = process.env.NODE_ENV === 'production';
   const targetUri = customUri || 'mongodb://localhost:27017/smart_complaint_resolution';
 
+  // Setup Mongoose connection lifecycle event listeners
+  mongoose.connection.on('connected', () => {
+    console.log(`✅ MongoDB Connected to: ${mongoose.connection.host}`);
+  });
+
+  mongoose.connection.on('error', (err) => {
+    console.error(`❌ MongoDB connection error: ${err.message}`);
+  });
+
+  mongoose.connection.on('disconnected', () => {
+    console.warn(`⚠️ MongoDB disconnected.`);
+  });
+
   try {
     const conn = await mongoose.connect(targetUri, {
-      serverSelectionTimeoutMS: 10000 // 10s timeout for Atlas TLS connection
+      serverSelectionTimeoutMS: 10000, // 10s timeout for Atlas TLS connection
+      maxPoolSize: 10,
+      socketTimeoutMS: 45000
     });
-    console.log(`✅ MongoDB Connected successfully: ${conn.connection.host}`);
     
     // Auto-seed if database is empty
     const User = require('../models/User');
@@ -23,10 +43,11 @@ const connectDB = async () => {
       console.log('✅ Auto-seeding completed.');
     }
   } catch (error) {
-    console.warn(`⚠️ Could not connect to primary MongoDB (${targetUri}): ${error.message}`);
+    console.warn(`⚠️ Could not connect to primary MongoDB (${sanitizeUri(targetUri)}): ${error.message}`);
     
     if (customUri || isProduction) {
-      console.error(`❌ Please check that your MONGO_URI is correct and IP 0.0.0.0/0 is allowed in MongoDB Atlas Network Access.`);
+      console.error(`❌ Atlas Connection Failed. Common cause: Render IP is not whitelisted in MongoDB Atlas.`);
+      console.error(`👉 Fix: Go to MongoDB Atlas -> Network Access -> Add IP Address -> Select 'Allow Access from Anywhere' (0.0.0.0/0) -> Confirm.`);
       return;
     }
 
@@ -50,5 +71,6 @@ const connectDB = async () => {
 };
 
 module.exports = connectDB;
+
 
 
