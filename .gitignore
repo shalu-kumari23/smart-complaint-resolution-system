@@ -1,0 +1,76 @@
+# =====================================
+# Dependencies
+# =====================================
+node_modules/
+*/node_modules/
+*/*/node_modules/
+
+# =====================================
+# Environment Variables & Secrets
+# =====================================
+.env
+.env.*
+!.env.example
+*/.env
+*/.env.*
+!*/.env.example
+*/*/.env
+*/*/.env.*
+!*/*/.env.example
+
+# =====================================
+# Python & Bytecode
+# =====================================
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# =====================================
+# Python Virtual Environments
+# =====================================
+venv/
+.venv/
+env/
+ENV/
+*/venv/
+*/.venv/
+*/*/venv/
+*/*/.venv/
+
+# =====================================
+# Production Builds & Bundles
+# =====================================
+dist/
+build/
+*/dist/
+*/build/
+*/*/dist/
+*/*/build/
+
+# =====================================
+# Uploads (Keep folder, ignore files)
+# =====================================
+backend/uploads/*
+!backend/uploads/.gitkeep
+*/backend/uploads/*
+!*/backend/uploads/.gitkeep
+
+# =====================================
+# Logs & Temp
+# =====================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+.DS_Store
+Thumbs.db
+
+# =====================================
+# IDEs
+# =====================================
+.vscode/
+.idea/

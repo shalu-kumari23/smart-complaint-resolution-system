@@ -198,6 +198,6 @@ def update_complaint_by_department(db, complaint_id, data, access_token: str):
                 smtp_settings=smtp_settings
             )
         except Exception as e:
-            print("⚠️ Warning: Failed to send email update notification:", str(e))
+            print("[AI] Warning: Failed to send email update notification:", str(e))
 
     return _serialize_department_complaint(updated_complaint)

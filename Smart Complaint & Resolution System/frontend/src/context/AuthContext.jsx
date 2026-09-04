@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
       if (err.response?.data?.message) {
         errorMsg = err.response.data.message;
       } else if (err.code === 'ERR_NETWORK' || !err.response) {
-        errorMsg = 'Cannot connect to backend server. Please make sure the server is running at http://localhost:5000.';
+        errorMsg = 'Cannot connect to backend server. Please verify that the API server is online.';
       } else if (err.response?.status === 500) {
         errorMsg = 'Internal Server Error. Please verify MongoDB is running.';
       }
@@ -102,7 +102,7 @@ export const AuthProvider = ({ children }) => {
       if (err.response?.data?.message) {
         errorMsg = err.response.data.message;
       } else if (err.code === 'ERR_NETWORK' || !err.response) {
-        errorMsg = 'Cannot connect to backend server. Please make sure the server is running at http://localhost:5000.';
+        errorMsg = 'Cannot connect to backend server. Please verify that the API server is online.';
       } else if (err.response?.status === 500) {
         errorMsg = 'Internal Server Error during registration. Please verify MongoDB is running.';
       }

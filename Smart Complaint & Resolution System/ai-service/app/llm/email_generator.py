@@ -79,8 +79,8 @@ Subject: {subject}
                 server.starttls()
                 server.login(smtp_settings["SMTP_USER"], smtp_settings["SMTP_PASSWORD"])
                 server.sendmail(smtp_settings["SMTP_USER"], to_email, msg.as_string())
-            print(f"📧 Real Email sent successfully to {to_email}")
+            print(f"[Email] Real Email sent successfully to {to_email}")
         except Exception as e:
-            print(f"⚠️ Failed to send real email via SMTP: {str(e)}")
+            print(f"[Email] Failed to send real email via SMTP: {str(e)}")
 
     return body

@@ -20,7 +20,7 @@ def get_database():
             db["complaints"].create_index("priority")
             db["complaints"].create_index("createdAt")
         except Exception as e:
-            print("⚠️ Warning: Could not connect to MongoDB from AI Service:", str(e))
+            print("[AI-DB] Warning: Could not connect to MongoDB from AI Service:", str(e))
             db = None
             client = None
 

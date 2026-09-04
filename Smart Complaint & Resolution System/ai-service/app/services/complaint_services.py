@@ -116,7 +116,7 @@ def create_complaint(db, data, access_token: str):
             smtp_settings=smtp_settings
         )
     except Exception as e:
-        print("⚠️ Warning: Failed to send submission email notification:", str(e))
+        print("[AI] Warning: Failed to send submission email notification:", str(e))
         
     return serialize_complaint(saved_complaint)
 
