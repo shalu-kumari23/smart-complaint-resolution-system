@@ -5,11 +5,12 @@ let mongodInstance = null;
 
 const connectDB = async () => {
   const customUri = process.env.MONGO_URI;
+  const isProduction = process.env.NODE_ENV === 'production';
   const targetUri = customUri || 'mongodb://localhost:27017/smart_complaint_resolution';
 
   try {
     const conn = await mongoose.connect(targetUri, {
-      serverSelectionTimeoutMS: 2500 // Fast fail in 2.5s if local mongod is not up
+      serverSelectionTimeoutMS: 10000 // 10s timeout for Atlas TLS connection
     });
     console.log(`✅ MongoDB Connected successfully: ${conn.connection.host}`);
     
@@ -23,6 +24,12 @@ const connectDB = async () => {
     }
   } catch (error) {
     console.warn(`⚠️ Could not connect to primary MongoDB (${targetUri}): ${error.message}`);
+    
+    if (customUri || isProduction) {
+      console.error(`❌ Please check that your MONGO_URI is correct and IP 0.0.0.0/0 is allowed in MongoDB Atlas Network Access.`);
+      return;
+    }
+
     console.log(`🔄 Starting embedded In-Memory MongoDB Server so backend works automatically without external setup...`);
 
     try {
