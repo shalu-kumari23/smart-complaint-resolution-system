@@ -4,6 +4,7 @@
   "description": "Node.js Express Backend for AI-Powered Smart Complaint & Resolution System",
   "main": "server.js",
   "scripts": {
+    "build": "npm install",
     "start": "node server.js",
     "dev": "node server.js",
     "seed": "node utils/seed.js",
